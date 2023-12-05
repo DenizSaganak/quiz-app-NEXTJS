@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Button from "../../../components/Button/Button";
 import { QuestionsState } from '../../../types/quiz';
+import QuestionCard from "../../../components/QuestionCard/QuestionCard";
 
 type Props = {
     questions: QuestionsState;
@@ -19,8 +20,6 @@ const Quiz = ({ questions, totalQuestions }: Props) => {
 
     const router = useRouter();
     
-    console.log(questions);
-
     const handleOnAnswerClick = (answer: string, currentQuestionIndex: number) => {
         if(isQuestionAnswered) return;
 
@@ -39,13 +38,25 @@ const Quiz = ({ questions, totalQuestions }: Props) => {
         setCurrentQuestionIndex(newQuestionIndex);
     }
 
+    const question = questions[currentQuestionIndex].question
+    const answers = questions[currentQuestionIndex].answers
+    const correctAnswer = questions[currentQuestionIndex].correct_answer;
+    const userAnswer = userAnswers[currentQuestionIndex]; 
+
     return (
         <div className='text-white text-center'>
         <p className='p-8 font-bold text-[20px]'>Score: {score}</p>
         <p className='text-[#9F50AC] font-bold pb-2 text-[14px]'>
           Question {currentQuestionIndex + 1} out of {totalQuestions}
         </p>
-        Question Card
+        <QuestionCard 
+          currentQuestionIndex={currentQuestionIndex} 
+          question={question} 
+          answers={answers} 
+          userAnswer={userAnswer} 
+          correctAnswer={correctAnswer} 
+          onClick={handleOnAnswerClick} 
+        />
         <div className='flex justify-between mt-16'>
         <Button text='Prev' onClick={() => handleChangeQuestion(-1)} />
         <Button
